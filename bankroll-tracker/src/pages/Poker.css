@@ -1,0 +1,23 @@
+/* Poker page reuses Dashboard.css stat grid + section styles,
+   which are already imported via Dashboard.js being loaded first.
+   Add any Poker-specific overrides here. */
+
+.poker-breakdown {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+
+.poker-breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.poker-breakdown-row:last-child {
+  border-bottom: none;
+}

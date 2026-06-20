@@ -1,0 +1,94 @@
+.entry-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.entry-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.entry-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.entry-sub {
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.entry-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.entry-amount {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.entry-amount.pos     { color: var(--green); }
+.entry-amount.neg     { color: var(--red); }
+.entry-amount.pending { color: var(--gold); }
+
+/* Pills */
+.pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.pill-green { background: var(--green-dim); color: var(--green); }
+.pill-red   { background: var(--red-dim);   color: var(--red); }
+.pill-gold  { background: var(--gold-dim);  color: var(--gold); }
+.pill-blue  { background: var(--blue-dim);  color: var(--blue); }
+
+/* Action buttons */
+.entry-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.action-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--muted);
+  transition: background 0.12s, color 0.12s;
+}
+
+.action-won:hover  { background: var(--green-dim); color: var(--green); border-color: var(--green); }
+.action-lost:hover { background: var(--red-dim);   color: var(--red);   border-color: var(--red); }
+.action-delete:hover { background: rgba(255,77,109,0.1); color: var(--red); }

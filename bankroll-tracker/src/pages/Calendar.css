@@ -1,0 +1,119 @@
+.month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.month-arrow {
+  width: 36px;
+  height: 36px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--text);
+  transition: background 0.12s;
+}
+
+.month-arrow:active { background: var(--card2); }
+
+.month-name {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+/* Calendar grid */
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 20px;
+}
+
+.cal-dow {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  padding: 4px 0 6px;
+  letter-spacing: 0.5px;
+}
+
+.cal-cell {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  background: none;
+  cursor: pointer;
+  gap: 1px;
+  transition: background 0.12s, border-color 0.12s;
+  min-height: 40px;
+}
+
+.cal-cell.empty {
+  pointer-events: none;
+}
+
+.cal-num {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cal-pnl {
+  font-size: 8px;
+  font-weight: 700;
+}
+.cal-pnl.pos { color: var(--green); }
+.cal-pnl.neg { color: var(--red); }
+
+.cal-cell.has-pos {
+  background: rgba(0, 214, 122, 0.1);
+  border-color: rgba(0, 214, 122, 0.2);
+}
+
+.cal-cell.has-neg {
+  background: rgba(255, 77, 109, 0.08);
+  border-color: rgba(255, 77, 109, 0.18);
+}
+
+.cal-cell.today .cal-num {
+  color: var(--gold);
+  position: relative;
+}
+
+.cal-cell.today {
+  border-color: rgba(245, 166, 35, 0.5);
+}
+
+.cal-cell.selected {
+  border-color: var(--green);
+  background: rgba(0, 214, 122, 0.15);
+}
+
+/* Day detail */
+.day-detail {
+  margin-top: 4px;
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.day-empty {
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+  padding: 16px;
+}
