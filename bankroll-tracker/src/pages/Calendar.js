@@ -98,7 +98,7 @@ export default function Calendar({ bets, poker }) {
               <span className="cal-num">{d}</span>
               {hasActivity && (
                 <span className={`cal-pnl ${pnl >= 0 ? 'pos' : 'neg'}`}>
-                  {pnl >= 0 ? '+' : ''}{Math.round(pnl)}
+                  {pnl >= 0 ? '+' : ''}${Math.abs(pnl).toFixed(2)}
                 </span>
               )}
             </button>

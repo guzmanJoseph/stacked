@@ -70,11 +70,23 @@
 }
 
 .cal-pnl {
-  font-size: 8px;
-  font-weight: 700;
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 1;
+  margin-top: 3px;
+  padding: 3px 5px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.22);
+  white-space: nowrap;
 }
-.cal-pnl.pos { color: var(--green); }
-.cal-pnl.neg { color: var(--red); }
+
+.cal-pnl.pos {
+  color: var(--green);
+}
+
+.cal-pnl.neg {
+  color: var(--red);
+}
 
 .cal-cell.has-pos {
   background: rgba(0, 214, 122, 0.1);

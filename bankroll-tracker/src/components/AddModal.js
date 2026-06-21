@@ -2,22 +2,21 @@ import React, { useState } from 'react';
 import './AddModal.css';
 import { today } from '../utils/calc';
 
-const BOOKS = ['DraftKings', 'FanDuel', 'BetMGM', 'ESPNBet', 'Caesars', 'Other'];
+const BOOKS = ['Hard Rock Bet', 'Underdog', 'Kalshi', 'ESPNBet', 'Caesars', 'Other'];
 const SPORTS = ['🏀 NBA', '🏈 NFL', '⚾ MLB', '🏒 NHL', '⚽ Soccer', '🎾 Tennis', '🏌️ Golf', '🥊 MMA', 'Other'];
-const RESULTS = ['pending', 'won', 'lost', 'push'];
+const RESULTS = ['pending', 'won', 'lost', 'push', 'cashed_out'];
 
 export default function AddModal({ onSubmit, onClose }) {
   const [type, setType] = useState('bet');
 
-  // Bet fields
-  const [book, setBook] = useState('DraftKings');
+  const [book, setBook] = useState('Hard Rock Bet');
   const [desc, setDesc] = useState('');
   const [stake, setStake] = useState('');
   const [odds, setOdds] = useState('');
   const [sport, setSport] = useState('🏀 NBA');
   const [result, setResult] = useState('pending');
+  const [cashoutAmount, setCashoutAmount] = useState('');
 
-  // Poker fields
   const [opp, setOpp] = useState('');
   const [buyin, setBuyin] = useState('');
   const [cashout, setCashout] = useState('');
@@ -28,10 +27,35 @@ export default function AddModal({ onSubmit, onClose }) {
   const handleSubmit = () => {
     if (type === 'bet') {
       if (!desc.trim() || !stake) return;
-      onSubmit({ type: 'bet', book, desc: desc.trim(), stake, odds, sport, result, date });
+
+      if (result === 'cashed_out' && !cashoutAmount) {
+        alert('Enter the amount you cashed out for.');
+        return;
+      }
+
+      onSubmit({
+        type: 'bet',
+        book,
+        desc: desc.trim(),
+        stake,
+        odds,
+        sport,
+        result,
+        date,
+        cashout_amount: result === 'cashed_out' ? Number(cashoutAmount) : null,
+        cashed_out: result === 'cashed_out',
+      });
     } else {
       if (!buyin || !cashout) return;
-      onSubmit({ type: 'poker', opp: opp.trim() || 'Poker session', buyin, cashout, hours, date });
+
+      onSubmit({
+        type: 'poker',
+        opp: opp.trim() || 'Poker session',
+        buyin,
+        cashout,
+        hours,
+        date,
+      });
     }
   };
 
@@ -41,7 +65,6 @@ export default function AddModal({ onSubmit, onClose }) {
         <div className="modal-handle" />
         <h2 className="modal-title">Add entry</h2>
 
-        {/* Type toggle */}
         <div className="type-toggle" role="group" aria-label="Entry type">
           <button className={type === 'bet' ? 'active' : ''} onClick={() => setType('bet')}>
             <i className="ti ti-ticket" aria-hidden="true" /> Bet
@@ -56,6 +79,7 @@ export default function AddModal({ onSubmit, onClose }) {
             <Field label="Sportsbook">
               <SegPicker options={BOOKS} value={book} onChange={setBook} />
             </Field>
+
             <Field label="Bet description">
               <input
                 className="form-input"
@@ -65,20 +89,50 @@ export default function AddModal({ onSubmit, onClose }) {
                 onChange={(e) => setDesc(e.target.value)}
               />
             </Field>
+
             <div className="row-fields">
               <Field label="Stake ($)">
-                <input className="form-input" type="number" placeholder="50" value={stake} onChange={(e) => setStake(e.target.value)} />
+                <input
+                  className="form-input"
+                  type="number"
+                  step="0.01"
+                  placeholder="50"
+                  value={stake}
+                  onChange={(e) => setStake(e.target.value)}
+                />
               </Field>
+
               <Field label="Odds">
-                <input className="form-input" type="text" placeholder="-110" value={odds} onChange={(e) => setOdds(e.target.value)} />
+                <input
+                  className="form-input"
+                  type="text"
+                  placeholder="-110"
+                  value={odds}
+                  onChange={(e) => setOdds(e.target.value)}
+                />
               </Field>
             </div>
+
             <Field label="Sport">
               <SegPicker options={SPORTS} value={sport} onChange={setSport} />
             </Field>
+
             <Field label="Result">
-              <SegPicker options={RESULTS} value={result} onChange={setResult} capitalize />
+              <SegPicker options={RESULTS} value={result} onChange={setResult} displayResult />
             </Field>
+
+            {result === 'cashed_out' && (
+              <Field label="Cash Out Amount ($)">
+                <input
+                  className="form-input"
+                  type="number"
+                  step="0.01"
+                  placeholder="Amount you received"
+                  value={cashoutAmount}
+                  onChange={(e) => setCashoutAmount(e.target.value)}
+                />
+              </Field>
+            )}
           </>
         ) : (
           <>
@@ -91,14 +145,17 @@ export default function AddModal({ onSubmit, onClose }) {
                 onChange={(e) => setOpp(e.target.value)}
               />
             </Field>
+
             <div className="row-fields">
               <Field label="Buy-in ($)">
                 <input className="form-input" type="number" placeholder="100" value={buyin} onChange={(e) => setBuyin(e.target.value)} />
               </Field>
+
               <Field label="Cash-out ($)">
                 <input className="form-input" type="number" placeholder="150" value={cashout} onChange={(e) => setCashout(e.target.value)} />
               </Field>
             </div>
+
             <Field label="Hours played">
               <input className="form-input" type="number" placeholder="3" value={hours} onChange={(e) => setHours(e.target.value)} />
             </Field>
@@ -125,7 +182,12 @@ function Field({ label, children }) {
   );
 }
 
-function SegPicker({ options, value, onChange, capitalize }) {
+function SegPicker({ options, value, onChange, displayResult }) {
+  const label = (o) => {
+    if (displayResult && o === 'cashed_out') return 'Cash Out Early';
+    return o.charAt(0).toUpperCase() + o.slice(1);
+  };
+
   return (
     <div className="seg-picker">
       {options.map((o) => (
@@ -135,7 +197,7 @@ function SegPicker({ options, value, onChange, capitalize }) {
           onClick={() => onChange(o)}
           type="button"
         >
-          {capitalize ? o.charAt(0).toUpperCase() + o.slice(1) : o}
+          {label(o)}
         </button>
       ))}
     </div>
