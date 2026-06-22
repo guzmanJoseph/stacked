@@ -144,6 +144,7 @@ export function BetCard({
 export function PokerCard({
   session,
   onDelete,
+  onEdit,
   compact = false,
 }) {
   const cls = session.pnl >= 0 ? 'pos' : 'neg';
@@ -184,11 +185,19 @@ export function PokerCard({
 
       {!compact && (
         <div className="entry-actions">
+          {onEdit && (
+            <button
+              className="action-btn"
+              onClick={() => onEdit(session)}
+              title="Edit session"
+            >
+              <i className="ti ti-pencil" />
+            </button>
+          )}
+
           <button
             className="action-btn action-delete"
-            onClick={() =>
-              onDelete(session.id)
-            }
+            onClick={() => onDelete(session.id)}
             title="Delete"
           >
             <i className="ti ti-trash" />

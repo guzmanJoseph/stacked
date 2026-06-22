@@ -24,14 +24,17 @@ export default function App() {
   const [modalOpen, setModalOpen] = useState(false);
   const [scanOpen, setScanOpen] = useState(false);
   const [scannedBet, setScannedBet] = useState(null);
+  const [editingEntry, setEditingEntry] = useState(null);
 
   const {
     data,
     addBet,
     deleteBet,
     updateBetResult,
+    editBet,
     addPoker,
     deletePoker,
+    editPoker,
     stats,
   } = useData(session?.user);
 
@@ -42,35 +45,34 @@ export default function App() {
     });
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSession(session);
-      }
+      (_event, session) => setSession(session)
     );
 
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
+    return () => authListener.subscription.unsubscribe();
   }, []);
 
-  const handleAdd = (entry) => {
-    if (entry.type === 'bet') addBet(entry);
-    else addPoker(entry);
+  const handleSubmit = (entry) => {
+    if (editingEntry?.type === 'bet') {
+      editBet(editingEntry.id, entry);
+    } else if (editingEntry?.type === 'poker') {
+      editPoker(editingEntry.id, entry);
+    } else if (entry.type === 'bet') {
+      addBet(entry);
+    } else {
+      addPoker(entry);
+    }
 
     setModalOpen(false);
     setScannedBet(null);
+    setEditingEntry(null);
   };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
   };
 
-  if (loading) {
-    return <div className="app">Loading...</div>;
-  }
-
-  if (!session) {
-    return <Auth />;
-  }
+  if (loading) return <div className="app">Loading...</div>;
+  if (!session) return <Auth />;
 
   return (
     <div className="app">
@@ -88,11 +90,22 @@ export default function App() {
             data={data.bets}
             onDelete={deleteBet}
             onUpdateResult={updateBetResult}
+            onEdit={(bet) => {
+              setEditingEntry({ ...bet, type: 'bet' });
+              setModalOpen(true);
+            }}
           />
         )}
 
         {tab === 'poker' && (
-          <Poker data={data.poker} onDelete={deletePoker} />
+          <Poker
+            data={data.poker}
+            onDelete={deletePoker}
+            onEdit={(session) => {
+              setEditingEntry({ ...session, type: 'poker' });
+              setModalOpen(true);
+            }}
+          />
         )}
 
         {tab === 'calendar' && (
@@ -102,19 +115,11 @@ export default function App() {
 
       {!modalOpen && !scanOpen && (
         <div className="fab-stack">
-          <button
-            className="fab scan-fab"
-            onClick={() => setScanOpen(true)}
-            aria-label="Scan screenshot"
-          >
+          <button className="fab scan-fab" onClick={() => setScanOpen(true)}>
             📸
           </button>
 
-          <button
-            className="fab"
-            onClick={() => setModalOpen(true)}
-            aria-label="Add entry"
-          >
+          <button className="fab" onClick={() => setModalOpen(true)}>
             <i className="ti ti-plus" aria-hidden="true" />
           </button>
         </div>
@@ -126,7 +131,6 @@ export default function App() {
             key={n.id}
             className={`nav-btn${tab === n.id ? ' active' : ''}`}
             onClick={() => setTab(n.id)}
-            aria-current={tab === n.id ? 'page' : undefined}
           >
             <i className={`ti ${n.icon}`} aria-hidden="true" />
             <span>{n.label}</span>
@@ -136,11 +140,12 @@ export default function App() {
 
       {modalOpen && (
         <AddModal
-          initialBet={scannedBet}
-          onSubmit={handleAdd}
+          initialBet={scannedBet || editingEntry}
+          onSubmit={handleSubmit}
           onClose={() => {
             setModalOpen(false);
             setScannedBet(null);
+            setEditingEntry(null);
           }}
         />
       )}

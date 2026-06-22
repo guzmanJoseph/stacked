@@ -18,30 +18,17 @@ export default function Auth() {
 
     if (isSignUp) {
       const { error } = await supabase.auth.signUp({ email, password });
-
-      if (error) {
-        setMessage(error.message);
-      } else {
-        setMessage("Account created. Check your email if confirmation is required.");
-      }
+      setMessage(error ? error.message : "Account created. Check your email if confirmation is required.");
     } else {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        setMessage(error.message);
-      } else {
-        setMessage("Logged in!");
-      }
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      setMessage(error ? error.message : "Logged in!");
     }
   }
 
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <div className="auth-logo">DG</div>
+        <img src="/dt.png" alt="Degeneracy Tracker logo" className="app-logo" />
 
         <h1>Degeneracy Tracker</h1>
         <p className="auth-subtitle">
@@ -78,27 +65,14 @@ export default function Auth() {
           type="button"
           onClick={() => setIsSignUp(!isSignUp)}
         >
-          {isSignUp
-            ? "Already have an account? Log in"
-            : "Need an account? Sign up"}
+          {isSignUp ? "Already have an account? Log in" : "Need an account? Sign up"}
         </button>
 
         <div className="install-card">
           <h3>Add this app to your phone</h3>
-
-          <p>
-            <strong>iPhone:</strong> Open this site in Safari, tap the Share
-            button, then tap <strong>Add to Home Screen</strong>.
-          </p>
-
-          <p>
-            <strong>Android:</strong> Open this site in Chrome, tap the menu,
-            then tap <strong>Install app</strong> or <strong>Add to Home screen</strong>.
-          </p>
-
-          <p className="install-note">
-            After installing, it opens like a normal app from your home screen.
-          </p>
+          <p><strong>iPhone:</strong> Open this site in Safari, tap Share, then tap <strong>Add to Home Screen</strong>.</p>
+          <p><strong>Android:</strong> Open this site in Chrome, tap the menu, then tap <strong>Install app</strong>.</p>
+          <p className="install-note">After installing, it opens like a normal app.</p>
         </div>
       </div>
     </div>
