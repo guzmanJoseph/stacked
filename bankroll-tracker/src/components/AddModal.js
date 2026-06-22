@@ -2,18 +2,17 @@ import React, { useState } from 'react';
 import './AddModal.css';
 import { today } from '../utils/calc';
 
-const BOOKS = ['Hard Rock Bet', 'Underdog', 'Kalshi', 'ESPNBet', 'Caesars', 'Other'];
+const BOOKS = ['Hard Rock Bet', 'Underdog', 'Kalshi', 'Chalkboard', 'Fliff', 'Other'];
 const SPORTS = ['🏀 NBA', '🏈 NFL', '⚾ MLB', '🏒 NHL', '⚽ Soccer', '🎾 Tennis', '🏌️ Golf', '🥊 MMA', 'Other'];
 const RESULTS = ['pending', 'won', 'lost', 'push', 'cashed_out'];
 
 export default function AddModal({ onSubmit, onClose, initialBet }) {
   const [type, setType] = useState('bet');
-
   const [book, setBook] = useState(initialBet?.book || 'Hard Rock Bet');
   const [desc, setDesc] = useState(initialBet?.desc || '');
   const [stake, setStake] = useState(initialBet?.stake || '');
   const [odds, setOdds] = useState(initialBet?.odds || '');
-  const [sport, setSport] = useState(initialBet?.sport || '🏀 NBA');
+  const [sport, setSport] = useState(initialBet?.sport || '⚽ Soccer');
   const [result, setResult] = useState(initialBet?.result || 'pending');
   const [cashoutAmount, setCashoutAmount] = useState(initialBet?.cashout_amount || '');
 
