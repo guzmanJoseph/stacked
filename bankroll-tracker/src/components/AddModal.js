@@ -9,20 +9,20 @@ const RESULTS = ['pending', 'won', 'lost', 'push', 'cashed_out'];
 export default function AddModal({ onSubmit, onClose, initialBet }) {
   const [type, setType] = useState('bet');
 
-  const [book, setBook] = useState('Hard Rock Bet');
-  const [desc, setDesc] = useState('');
-  const [stake, setStake] = useState('');
-  const [odds, setOdds] = useState('');
-  const [sport, setSport] = useState('🏀 NBA');
-  const [result, setResult] = useState('pending');
-  const [cashoutAmount, setCashoutAmount] = useState('');
+  const [book, setBook] = useState(initialBet?.book || 'Hard Rock Bet');
+  const [desc, setDesc] = useState(initialBet?.desc || '');
+  const [stake, setStake] = useState(initialBet?.stake || '');
+  const [odds, setOdds] = useState(initialBet?.odds || '');
+  const [sport, setSport] = useState(initialBet?.sport || '🏀 NBA');
+  const [result, setResult] = useState(initialBet?.result || 'pending');
+  const [cashoutAmount, setCashoutAmount] = useState(initialBet?.cashout_amount || '');
 
   const [opp, setOpp] = useState('');
   const [buyin, setBuyin] = useState('');
   const [cashout, setCashout] = useState('');
   const [hours, setHours] = useState('');
 
-  const [date, setDate] = useState(today());
+  const [date, setDate] = useState(initialBet?.date || today());
 
   const handleSubmit = () => {
     if (type === 'bet') {
