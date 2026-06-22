@@ -10,6 +10,10 @@ export default async function handler(req, res) {
   }
 
   try {
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(500).json({ error: "Missing OPENAI_API_KEY" });
+    }
+
     const { imageBase64 } = req.body;
 
     if (!imageBase64) {
@@ -18,6 +22,9 @@ export default async function handler(req, res) {
 
     const response = await client.responses.create({
       model: "gpt-4.1-mini",
+      text: {
+        format: { type: "json_object" },
+      },
       input: [
         {
           role: "user",
@@ -27,24 +34,22 @@ export default async function handler(req, res) {
               text: `
 Extract the bet slip information from this screenshot.
 
-Return ONLY valid JSON:
+Return only valid JSON in this exact shape:
 {
-  "book": string | null,
-  "desc": string | null,
-  "stake": number | null,
-  "odds": string | null,
-  "sport": string | null,
+  "book": null,
+  "desc": null,
+  "stake": null,
+  "odds": null,
+  "sport": null,
   "result": "pending",
-  "date": string | null,
+  "date": null,
   "cashout_amount": null,
   "cashed_out": false,
-  "legs": [
-    {
-      "selection": string | null,
-      "odds": string | null
-    }
-  ]
+  "legs": []
 }
+
+Use numbers for stake. Use strings for odds like "+319" or "-110".
+If a field is missing, use null.
               `,
             },
             {
@@ -56,12 +61,12 @@ Return ONLY valid JSON:
       ],
     });
 
-    const text = response.output_text;
-    const parsed = JSON.parse(text);
-
-    res.status(200).json(parsed);
+    const parsed = JSON.parse(response.output_text);
+    return res.status(200).json(parsed);
   } catch (err) {
     console.error("SCAN ERROR:", err);
-    res.status(500).json({ error: "Failed to scan bet screenshot" });
+    return res.status(500).json({
+      error: err.message || "Failed to scan bet screenshot",
+    });
   }
 }
