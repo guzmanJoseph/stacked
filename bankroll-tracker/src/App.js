@@ -8,6 +8,7 @@ import Bets from './pages/Bets';
 import Poker from './pages/Poker';
 import Calendar from './pages/Calendar';
 import AddModal from './components/AddModal';
+import ScanModal from './components/ScanModal';
 
 const NAV = [
   { id: 'dashboard', icon: 'ti-layout-dashboard', label: 'Dashboard' },
@@ -21,6 +22,8 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState('dashboard');
   const [modalOpen, setModalOpen] = useState(false);
+  const [scanOpen, setScanOpen] = useState(false);
+  const [scannedBet, setScannedBet] = useState(null);
 
   const {
     data,
@@ -52,7 +55,9 @@ export default function App() {
   const handleAdd = (entry) => {
     if (entry.type === 'bet') addBet(entry);
     else addPoker(entry);
+
     setModalOpen(false);
+    setScannedBet(null);
   };
 
   const handleLogout = async () => {
@@ -86,20 +91,34 @@ export default function App() {
           />
         )}
 
-        {tab === 'poker' && <Poker data={data.poker} onDelete={deletePoker} />}
+        {tab === 'poker' && (
+          <Poker data={data.poker} onDelete={deletePoker} />
+        )}
 
         {tab === 'calendar' && (
           <Calendar bets={data.bets} poker={data.poker} />
         )}
       </main>
 
-      <button
-        className="fab"
-        onClick={() => setModalOpen(true)}
-        aria-label="Add entry"
-      >
-        <i className="ti ti-plus" aria-hidden="true" />
-      </button>
+      {!modalOpen && !scanOpen && (
+        <div className="fab-stack">
+          <button
+            className="fab scan-fab"
+            onClick={() => setScanOpen(true)}
+            aria-label="Scan screenshot"
+          >
+            📸
+          </button>
+
+          <button
+            className="fab"
+            onClick={() => setModalOpen(true)}
+            aria-label="Add entry"
+          >
+            <i className="ti ti-plus" aria-hidden="true" />
+          </button>
+        </div>
+      )}
 
       <nav className="bottom-nav" aria-label="Main navigation">
         {NAV.map((n) => (
@@ -116,7 +135,25 @@ export default function App() {
       </nav>
 
       {modalOpen && (
-        <AddModal onSubmit={handleAdd} onClose={() => setModalOpen(false)} />
+        <AddModal
+          initialBet={scannedBet}
+          onSubmit={handleAdd}
+          onClose={() => {
+            setModalOpen(false);
+            setScannedBet(null);
+          }}
+        />
+      )}
+
+      {scanOpen && (
+        <ScanModal
+          onClose={() => setScanOpen(false)}
+          onScanComplete={(parsedBet) => {
+            setScannedBet(parsedBet);
+            setScanOpen(false);
+            setModalOpen(true);
+          }}
+        />
       )}
     </div>
   );

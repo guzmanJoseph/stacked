@@ -6,7 +6,7 @@ const BOOKS = ['Hard Rock Bet', 'Underdog', 'Kalshi', 'ESPNBet', 'Caesars', 'Oth
 const SPORTS = ['🏀 NBA', '🏈 NFL', '⚾ MLB', '🏒 NHL', '⚽ Soccer', '🎾 Tennis', '🏌️ Golf', '🥊 MMA', 'Other'];
 const RESULTS = ['pending', 'won', 'lost', 'push', 'cashed_out'];
 
-export default function AddModal({ onSubmit, onClose }) {
+export default function AddModal({ onSubmit, onClose, initialBet }) {
   const [type, setType] = useState('bet');
 
   const [book, setBook] = useState('Hard Rock Bet');
