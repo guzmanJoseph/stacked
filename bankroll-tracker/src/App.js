@@ -25,6 +25,7 @@ export default function App() {
   const [scanOpen, setScanOpen] = useState(false);
   const [scannedBet, setScannedBet] = useState(null);
   const [editingEntry, setEditingEntry] = useState(null);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const {
     data,
@@ -85,8 +86,11 @@ export default function App() {
           <span>Degeneracy Tracker</span>
         </div>
 
-        <button className="logout-btn" onClick={handleLogout}>
-          <i className="ti ti-logout" />
+        <button
+          className="settings-btn"
+          onClick={() => setSettingsOpen(true)}
+        >
+          <i className="ti ti-settings" />
         </button>
       </div>
 
