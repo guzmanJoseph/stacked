@@ -3,9 +3,9 @@ import './Bets.css';
 import { BetCard } from '../components/EntryCard';
 import { EmptyState } from './Dashboard';
 
-const FILTERS = ['all', 'pending', 'won', 'lost'];
+const FILTERS = ['all', 'pending', 'won', 'lost', 'push', 'cashed-out'];
 
-export default function Bets({ data, onDelete, onUpdateResult }) {
+export default function Bets({ data, onDelete, onUpdateResult, onEdit }) {
   const [filter, setFilter] = useState('all');
 
   const visible = filter === 'all' ? data : data.filter((b) => b.result === filter);
@@ -49,6 +49,7 @@ export default function Bets({ data, onDelete, onUpdateResult }) {
             bet={bet}
             onDelete={onDelete}
             onUpdateResult={onUpdateResult}
+            onEdit={onEdit}
           />
         ))
       )}

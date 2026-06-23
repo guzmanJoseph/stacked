@@ -222,13 +222,55 @@ export function useData(user) {
     };
   }, [data]);
 
-  return {
-    data,
-    addBet,
-    deleteBet,
-    updateBetResult,
-    addPoker,
-    deletePoker,
-    stats,
-  };
+  const editBet = useCallback(async (id, updates) => {
+  const { data: updated, error } = await supabase
+    .from('bets')
+    .update(updates)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  setData((prev) => ({
+    ...prev,
+    bets: prev.bets.map((b) => (b.id === id ? updated : b)),
+  }));
+}, []);
+
+const editPoker = useCallback(async (id, updates) => {
+  const pnl = Number(updates.cashout) - Number(updates.buyin);
+
+  const { data: updated, error } = await supabase
+    .from('poker_sessions')
+    .update({ ...updates, pnl })
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  setData((prev) => ({
+    ...prev,
+    poker: prev.poker.map((p) => (p.id === id ? updated : p)),
+  }));
+}, []);
+
+return {
+  data,
+  addBet,
+  deleteBet,
+  updateBetResult,
+  editBet,
+  addPoker,
+  deletePoker,
+  editPoker,
+  stats,
+};
 }
