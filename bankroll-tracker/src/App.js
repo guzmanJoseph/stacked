@@ -21,8 +21,11 @@ export default function App() {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState('dashboard');
+
   const [modalOpen, setModalOpen] = useState(false);
   const [scanOpen, setScanOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+
   const [scannedBet, setScannedBet] = useState(null);
   const [editingEntry, setEditingEntry] = useState(null);
 
@@ -45,14 +48,27 @@ export default function App() {
     });
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_event, session) => setSession(session)
+      (_event, session) => {
+        setSession(session);
+      }
     );
 
-    return () => authListener.subscription.unsubscribe();
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
   }, []);
+
+  const resetModals = () => {
+    setModalOpen(false);
+    setScanOpen(false);
+    setSettingsOpen(false);
+    setScannedBet(null);
+    setEditingEntry(null);
+  };
 
   const handleSubmit = (entry) => {
     const { type, ...cleanEntry } = entry;
+
     if (editingEntry?.type === 'bet') {
       editBet(editingEntry.id, cleanEntry);
     } else if (editingEntry?.type === 'poker') {
@@ -63,13 +79,21 @@ export default function App() {
       addPoker(entry);
     }
 
-    setModalOpen(false);
-    setScannedBet(null);
-    setEditingEntry(null);
+    resetModals();
   };
 
-  if (loading) return <div className="app">Loading...</div>;
-  if (!session) return <Auth />;
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    resetModals();
+  };
+
+  if (loading) {
+    return <div className="app">Loading...</div>;
+  }
+
+  if (!session) {
+    return <Auth />;
+  }
 
   return (
     <div className="app">
@@ -77,20 +101,24 @@ export default function App() {
 
       <div className="top-bar">
         <div className="app-title">
-          <img src="/dt.png" alt="logo" className="nav-logo" />
+          <img src="/dt.png" alt="Degeneracy Tracker logo" className="nav-logo" />
           <span>Degeneracy Tracker</span>
         </div>
 
         <button
           className="settings-btn"
+          type="button"
           onClick={() => setSettingsOpen(true)}
+          aria-label="Open settings"
         >
-          <i className="ti ti-settings" />
+          <i className="ti ti-settings" aria-hidden="true" />
         </button>
       </div>
 
       <main className="main">
-        {tab === 'dashboard' && <Dashboard data={data} stats={stats} />}
+        {tab === 'dashboard' && (
+          <Dashboard data={data} stats={stats} />
+        )}
 
         {tab === 'bets' && (
           <Bets
@@ -99,6 +127,7 @@ export default function App() {
             onUpdateResult={updateBetResult}
             onEdit={(bet) => {
               setEditingEntry({ ...bet, type: 'bet' });
+              setScannedBet(null);
               setModalOpen(true);
             }}
           />
@@ -110,6 +139,7 @@ export default function App() {
             onDelete={deletePoker}
             onEdit={(session) => {
               setEditingEntry({ ...session, type: 'poker' });
+              setScannedBet(null);
               setModalOpen(true);
             }}
           />
@@ -120,13 +150,27 @@ export default function App() {
         )}
       </main>
 
-      {!modalOpen && !scanOpen && (
+      {!modalOpen && !scanOpen && !settingsOpen && (
         <div className="fab-stack">
-          <button className="fab scan-fab" onClick={() => setScanOpen(true)}>
+          <button
+            className="fab scan-fab"
+            type="button"
+            onClick={() => setScanOpen(true)}
+            aria-label="Scan bet screenshot"
+          >
             📸
           </button>
 
-          <button className="fab" onClick={() => setModalOpen(true)}>
+          <button
+            className="fab"
+            type="button"
+            onClick={() => {
+              setEditingEntry(null);
+              setScannedBet(null);
+              setModalOpen(true);
+            }}
+            aria-label="Add entry"
+          >
             <i className="ti ti-plus" aria-hidden="true" />
           </button>
         </div>
@@ -137,7 +181,9 @@ export default function App() {
           <button
             key={n.id}
             className={`nav-btn${tab === n.id ? ' active' : ''}`}
+            type="button"
             onClick={() => setTab(n.id)}
+            aria-current={tab === n.id ? 'page' : undefined}
           >
             <i className={`ti ${n.icon}`} aria-hidden="true" />
             <span>{n.label}</span>
@@ -149,11 +195,7 @@ export default function App() {
         <AddModal
           initialBet={scannedBet || editingEntry}
           onSubmit={handleSubmit}
-          onClose={() => {
-            setModalOpen(false);
-            setScannedBet(null);
-            setEditingEntry(null);
-          }}
+          onClose={resetModals}
         />
       )}
 
@@ -162,6 +204,7 @@ export default function App() {
           onClose={() => setScanOpen(false)}
           onScanComplete={(parsedBet) => {
             setScannedBet(parsedBet);
+            setEditingEntry(null);
             setScanOpen(false);
             setModalOpen(true);
           }}
@@ -169,36 +212,38 @@ export default function App() {
       )}
 
       {settingsOpen && (
-  <div
-    className="settings-overlay"
-    onClick={() => setSettingsOpen(false)}
-  >
-    <div
-      className="settings-sheet"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <div className="sheet-handle" />
+        <div
+          className="settings-overlay"
+          onClick={() => setSettingsOpen(false)}
+        >
+          <div
+            className="settings-sheet"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="sheet-handle" />
 
-      <h3>Settings</h3>
+            <h3>Settings</h3>
 
-      <button
-        className="settings-item"
-        onClick={handleLogout}
-      >
-        <i className="ti ti-logout" />
-        <span>Sign Out</span>
-      </button>
+            <button
+              className="settings-item"
+              type="button"
+              onClick={handleLogout}
+            >
+              <i className="ti ti-logout" aria-hidden="true" />
+              <span>Sign Out</span>
+            </button>
 
-      <button
-        className="settings-item"
-        onClick={() => setSettingsOpen(false)}
-      >
-        <i className="ti ti-x" />
-        <span>Close</span>
-      </button>
-    </div>
-  </div>
-)}
+            <button
+              className="settings-item"
+              type="button"
+              onClick={() => setSettingsOpen(false)}
+            >
+              <i className="ti ti-x" aria-hidden="true" />
+              <span>Close</span>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
