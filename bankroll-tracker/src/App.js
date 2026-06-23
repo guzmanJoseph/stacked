@@ -52,10 +52,11 @@ export default function App() {
   }, []);
 
   const handleSubmit = (entry) => {
+    const { type, ...cleanEntry } = entry;
     if (editingEntry?.type === 'bet') {
-      editBet(editingEntry.id, entry);
+      editBet(editingEntry.id, cleanEntry);
     } else if (editingEntry?.type === 'poker') {
-      editPoker(editingEntry.id, entry);
+      editPoker(editingEntry.id, cleanEntry);
     } else if (entry.type === 'bet') {
       addBet(entry);
     } else {
@@ -78,9 +79,16 @@ export default function App() {
     <div className="app">
       <h1 className="sr-only">Bankroll Tracker</h1>
 
-      <button className="logout-btn" onClick={handleLogout}>
-        Log Out
-      </button>
+      <div className="top-bar">
+        <div className="app-title">
+          <img src="/dt.png" alt="logo" className="nav-logo" />
+          <span>Degeneracy Tracker</span>
+        </div>
+
+        <button className="logout-btn" onClick={handleLogout}>
+          <i className="ti ti-logout" />
+        </button>
+      </div>
 
       <main className="main">
         {tab === 'dashboard' && <Dashboard data={data} stats={stats} />}
