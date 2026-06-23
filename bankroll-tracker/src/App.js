@@ -25,7 +25,6 @@ export default function App() {
   const [scanOpen, setScanOpen] = useState(false);
   const [scannedBet, setScannedBet] = useState(null);
   const [editingEntry, setEditingEntry] = useState(null);
-  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const {
     data,
@@ -67,10 +66,6 @@ export default function App() {
     setModalOpen(false);
     setScannedBet(null);
     setEditingEntry(null);
-  };
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
   };
 
   if (loading) return <div className="app">Loading...</div>;
@@ -172,6 +167,38 @@ export default function App() {
           }}
         />
       )}
+
+      {settingsOpen && (
+  <div
+    className="settings-overlay"
+    onClick={() => setSettingsOpen(false)}
+  >
+    <div
+      className="settings-sheet"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <div className="sheet-handle" />
+
+      <h3>Settings</h3>
+
+      <button
+        className="settings-item"
+        onClick={handleLogout}
+      >
+        <i className="ti ti-logout" />
+        <span>Sign Out</span>
+      </button>
+
+      <button
+        className="settings-item"
+        onClick={() => setSettingsOpen(false)}
+      >
+        <i className="ti ti-x" />
+        <span>Close</span>
+      </button>
+    </div>
+  </div>
+)}
     </div>
   );
 }
