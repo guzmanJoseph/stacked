@@ -4,7 +4,7 @@ import { PokerCard } from '../components/EntryCard';
 import { EmptyState } from './Dashboard';
 import { fmt } from '../utils/calc';
 
-export default function Poker({ data, onDelete }) {
+export default function Poker({ data, onDelete, onEdit }) {
   const total = data.reduce((a, p) => a + p.pnl, 0);
   const totalHours = data.reduce((a, p) => a + (p.hours || 0), 0);
   const perHour = totalHours > 0 ? total / totalHours : 0;
@@ -45,7 +45,7 @@ export default function Poker({ data, onDelete }) {
         <EmptyState icon="ti-cards" text="No poker sessions yet — tap + to log one" />
       ) : (
         data.map((session) => (
-          <PokerCard key={session.id} session={session} onDelete={onDelete} />
+          <PokerCard key={session.id} session={session} onDelete={onDelete} onEdit={onEdit} />
         ))
       )}
     </div>

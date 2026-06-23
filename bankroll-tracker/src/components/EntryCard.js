@@ -191,7 +191,7 @@ export function PokerCard({
               onClick={() => onEdit(session)}
               title="Edit session"
             >
-              <i className="ti ti-pencil" />
+              ✏️
             </button>
           )}
 
