@@ -1,13 +1,35 @@
+/* ─── Entry cards ───────────────────────────────────────── */
 .entry-card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  padding: 14px 14px 14px 16px;
   margin-bottom: 8px;
   display: flex;
   align-items: center;
   gap: 12px;
+  transition: background 0.15s, border-color 0.15s;
+  position: relative;
+  overflow: hidden;
 }
+
+/* Left accent line by result */
+.entry-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 3px 0 0 3px;
+}
+
+/* Color the accent line based on pill class presence — done via JS but mirrored in CSS */
+.entry-card:has(.pill-green)::before  { background: var(--green); opacity: 0.7; }
+.entry-card:has(.pill-red)::before    { background: var(--red);   opacity: 0.7; }
+.entry-card:has(.pill-gold)::before   { background: var(--gold);  opacity: 0.7; }
+.entry-card:has(.pill-blue)::before   { background: var(--blue);  opacity: 0.7; }
+.entry-card:has(.pill-purple)::before { background: var(--purple);opacity: 0.7; }
 
 .entry-left {
   flex: 1;
@@ -24,6 +46,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: -0.1px;
 }
 
 .entry-sub {
@@ -38,57 +61,68 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 4px;
+  gap: 5px;
   flex-shrink: 0;
 }
 
 .entry-amount {
   font-size: 16px;
   font-weight: 700;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.4px;
+  font-family: 'JetBrains Mono', monospace;
 }
 
 .entry-amount.pos     { color: var(--green); }
 .entry-amount.neg     { color: var(--red); }
 .entry-amount.pending { color: var(--gold); }
 
-/* Pills */
+/* ── Pills ──────────────────────────────────────────────── */
 .pill {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
-  padding: 2px 7px;
+  padding: 3px 8px;
   border-radius: var(--radius-pill);
-  letter-spacing: 0.3px;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
 }
 
-.pill-green { background: var(--green-dim); color: var(--green); }
-.pill-red   { background: var(--red-dim);   color: var(--red); }
-.pill-gold  { background: var(--gold-dim);  color: var(--gold); }
-.pill-blue  { background: var(--blue-dim);  color: var(--blue); }
+.pill-green  { background: var(--green-dim);  color: var(--green);  border: 1px solid rgba(0,229,135,0.2); }
+.pill-red    { background: var(--red-dim);    color: var(--red);    border: 1px solid rgba(255,59,92,0.2); }
+.pill-gold   { background: var(--gold-dim);   color: var(--gold);   border: 1px solid rgba(240,165,0,0.2); }
+.pill-blue   { background: var(--blue-dim);   color: var(--blue);   border: 1px solid rgba(75,157,255,0.2); }
+.pill-purple { background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(155,125,255,0.2); }
 
-/* Action buttons */
+/* ── Action buttons ─────────────────────────────────────── */
 .entry-actions {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
   flex-shrink: 0;
 }
 
 .action-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: 7px;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
   border: 1px solid var(--border);
-  background: none;
+  background: var(--card);
   color: var(--muted);
-  transition: background 0.12s, color 0.12s;
+  transition: background 0.14s, color 0.14s, border-color 0.14s, transform 0.1s;
 }
 
-.action-won:hover  { background: var(--green-dim); color: var(--green); border-color: var(--green); }
-.action-lost:hover { background: var(--red-dim);   color: var(--red);   border-color: var(--red); }
-.action-delete:hover { background: rgba(255,77,109,0.1); color: var(--red); }
+.action-btn:active {
+  transform: scale(0.92);
+}
+
+.action-won:active  { background: var(--green-dim); color: var(--green); border-color: rgba(0,229,135,0.4); }
+.action-lost:active { background: var(--red-dim);   color: var(--red);   border-color: rgba(255,59,92,0.4); }
+.action-delete:active { background: rgba(255,59,92,0.1); color: var(--red); }
+
+/* hover for desktop */
+.action-won:hover  { background: var(--green-dim); color: var(--green); border-color: rgba(0,229,135,0.4); }
+.action-lost:hover { background: var(--red-dim);   color: var(--red);   border-color: rgba(255,59,92,0.4); }
+.action-delete:hover { background: rgba(255,59,92,0.1); color: var(--red); }

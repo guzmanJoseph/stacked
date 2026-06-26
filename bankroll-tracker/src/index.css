@@ -1,4 +1,10 @@
-/* Global reset and design tokens */
+/* ─────────────────────────────────────────────────────────
+   DEGENERACY TRACKER — Design Tokens
+   Style: Modern Dark Cinema Mobile
+   ───────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap');
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -6,43 +12,59 @@
 }
 
 :root {
-  --green: #00d67a;
-  --green-dim: rgba(0, 214, 122, 0.15);
-  --red: #ff4d6d;
-  --red-dim: rgba(255, 77, 109, 0.12);
-  --gold: #f5a623;
-  --gold-dim: rgba(245, 166, 35, 0.15);
-  --blue: #4f9eff;
-  --blue-dim: rgba(79, 158, 255, 0.15);
-  --purple: #a78bfa;
+  /* Core palette — cinema dark */
+  --bg:       #070709;
+  --bg-base:  #0c0c10;
+  --bg-raised:#111118;
+  --card:     rgba(255,255,255,0.04);
+  --card2:    rgba(255,255,255,0.07);
 
-  --bg: #0f0f13;
-  --card: #1a1a22;
-  --card2: #22222e;
-  --border: #2e2e3e;
-  --border-light: rgba(255,255,255,0.06);
+  /* Borders */
+  --border:         rgba(255,255,255,0.08);
+  --border-light:   rgba(255,255,255,0.05);
+  --border-strong:  rgba(255,255,255,0.14);
 
-  --text: #f0efe8;
-  --muted: #8888a0;
-  --muted2: #555568;
+  /* Semantic colors */
+  --green:      #00e587;
+  --green-dim:  rgba(0, 229, 135, 0.12);
+  --green-glow: rgba(0, 229, 135, 0.22);
+  --red:        #ff3b5c;
+  --red-dim:    rgba(255, 59, 92, 0.12);
+  --gold:       #f0a500;
+  --gold-dim:   rgba(240, 165, 0, 0.13);
+  --blue:       #4b9dff;
+  --blue-dim:   rgba(75, 157, 255, 0.13);
+  --purple:     #9b7dff;
+  --purple-dim: rgba(155, 125, 255, 0.13);
 
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
-  --radius-pill: 100px;
+  /* Text */
+  --text:   #edeef2;
+  --muted:  #6e7080;
+  --muted2: #3e3f50;
+
+  /* Radii */
+  --radius-sm:  8px;
+  --radius-md:  14px;
+  --radius-lg:  18px;
+  --radius-xl:  22px;
+  --radius-2xl: 28px;
+  --radius-pill:100px;
 }
 
 html, body, #root {
   height: 100%;
   background: var(--bg);
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 15px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overscroll-behavior: none;
 }
+
+/* Mono for numbers/amounts */
+.mono { font-family: 'JetBrains Mono', monospace; }
 
 input, button, select, textarea {
   font-family: inherit;
@@ -61,17 +83,57 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
 }
 
-/* Scrollbars */
-::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
 
-/* Utility */
 .sr-only {
   position: absolute;
   width: 1px;
   height: 1px;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  clip: rect(0,0,0,0);
   white-space: nowrap;
+}
+
+/* ── Ambient background blobs ─────────── */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::before {
+  width: 340px;
+  height: 340px;
+  top: -80px;
+  left: -100px;
+  background: radial-gradient(circle, rgba(0,229,135,0.06) 0%, transparent 70%);
+  animation: blob1 14s ease-in-out infinite alternate;
+}
+
+body::after {
+  width: 280px;
+  height: 280px;
+  bottom: 80px;
+  right: -80px;
+  background: radial-gradient(circle, rgba(75,157,255,0.05) 0%, transparent 70%);
+  animation: blob2 17s ease-in-out infinite alternate;
+}
+
+@keyframes blob1 {
+  0%   { transform: translate(0,0) scale(1); }
+  100% { transform: translate(30px,40px) scale(1.1); }
+}
+
+@keyframes blob2 {
+  0%   { transform: translate(0,0) scale(1); }
+  100% { transform: translate(-20px,-30px) scale(0.9); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before, body::after { animation: none; }
 }

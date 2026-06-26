@@ -105,7 +105,7 @@ export function BetCard({
                 }
                 title="Push"
               >
-                ↔️
+                <i className="ti ti-arrows-exchange" />
               </button>
 
               <button
@@ -113,7 +113,7 @@ export function BetCard({
                 onClick={handleCashout}
                 title="Cash Out"
               >
-                💵
+                <i className="ti ti-cash" />
               </button>
             </>
           )}
@@ -191,7 +191,7 @@ export function PokerCard({
               onClick={() => onEdit(session)}
               title="Edit session"
             >
-              ✏️
+              <i className="ti ti-pencil" />
             </button>
           )}
 

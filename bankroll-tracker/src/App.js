@@ -158,7 +158,7 @@ export default function App() {
             onClick={() => setScanOpen(true)}
             aria-label="Scan bet screenshot"
           >
-            📸
+            <i className="ti ti-camera" aria-hidden="true" />
           </button>
 
           <button

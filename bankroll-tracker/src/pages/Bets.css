@@ -1,3 +1,4 @@
+/* ─── Bets page ─────────────────────────────────────────── */
 .page-header {
   display: flex;
   justify-content: space-between;
@@ -6,17 +7,29 @@
 }
 
 .page-title {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.5px;
 }
 
-.badge-gold { background: var(--gold-dim); color: var(--gold); }
+/* Badge */
+.badge-gold {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--gold-dim);
+  color: var(--gold);
+  border: 1px solid rgba(240,165,0,0.22);
+  letter-spacing: 0.1px;
+  white-space: nowrap;
+}
 
+/* ── Filter pills ───────────────────────────────────────── */
 .filter-tabs {
   display: flex;
   gap: 6px;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
   overflow-x: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -32,27 +45,34 @@
   padding: 7px 14px;
   border-radius: var(--radius-pill);
   border: 1px solid var(--border);
-  background: none;
+  background: var(--card);
   color: var(--muted);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
-  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  transition: background 0.14s, color 0.14s, border-color 0.14s;
+  letter-spacing: 0.1px;
+}
+
+.filter-tab:active {
+  background: var(--card2);
 }
 
 .filter-tab.active {
   background: var(--green);
-  color: #000;
+  color: #042e16;
   border-color: var(--green);
+  font-weight: 700;
+  box-shadow: 0 2px 12px var(--green-glow);
 }
 
 .tab-count {
-  background: rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.1);
   color: inherit;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
   padding: 1px 5px;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
 .filter-tab.active .tab-count {
