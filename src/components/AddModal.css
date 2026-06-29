@@ -1,208 +1,161 @@
-/* ─── Add / Edit modal ───────────────────────────────────── */
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   z-index: 100;
   display: flex;
   align-items: flex-end;
-  animation: overlayIn 0.2s ease;
+  animation: overlayIn 0.22s ease;
 }
 
 @keyframes overlayIn {
   from { opacity: 0; }
-  to   { opacity: 1; }
+  to { opacity: 1; }
 }
 
 .modal {
-  background: #0f0f14;
-  border-radius: 26px 26px 0 0;
-  border-top: 1px solid var(--border-strong);
-  padding: 14px 20px calc(32px + env(safe-area-inset-bottom));
   width: 100%;
   max-height: 92dvh;
   overflow-y: auto;
-  animation: sheetUp 0.24s cubic-bezier(0.16,1,0.3,1);
+  padding: 15px 20px calc(34px + env(safe-area-inset-bottom));
+  border-radius: 32px 32px 0 0;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(0,245,155,0.11), transparent 34%),
+    rgba(12, 13, 20, 0.98);
+  border-top: 1px solid rgba(255,255,255,0.16);
+  box-shadow: 0 -28px 90px rgba(0,0,0,0.62);
+  animation: sheetUp 0.32s cubic-bezier(0.16,1,0.3,1);
   position: relative;
 }
 
-/* Top edge highlight */
-.modal::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 10%, rgba(0,229,135,0.25) 50%, transparent 90%);
-}
-
 @keyframes sheetUp {
-  from { transform: translateY(60px); opacity: 0.6; }
-  to   { transform: translateY(0);    opacity: 1; }
+  from { transform: translateY(80px) scale(0.98); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
 .modal-handle {
-  width: 36px;
-  height: 4px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 4px;
+  width: 44px;
+  height: 5px;
+  background: rgba(255,255,255,0.16);
+  border-radius: 999px;
   margin: 0 auto 20px;
 }
 
 .modal-title {
-  font-size: 18px;
-  font-weight: 800;
-  margin-bottom: 18px;
-  letter-spacing: -0.4px;
+  font-size: 21px;
+  font-weight: 900;
+  margin-bottom: 20px;
+  letter-spacing: -0.7px;
 }
 
-/* ── Type toggle ────────────────────────────────────────── */
-.type-toggle {
-  display: flex;
-  background: rgba(255,255,255,0.04);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  padding: 4px;
-  gap: 4px;
-  margin-bottom: 18px;
-}
-
-.type-toggle button {
-  flex: 1;
-  padding: 9px 8px;
-  border-radius: 10px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  transition: background 0.15s, color 0.15s;
-}
-
-.type-toggle button i {
-  font-size: 15px;
-}
-
-.type-toggle button.active {
-  background: rgba(255,255,255,0.08);
-  color: var(--text);
-}
-
-/* ── Form fields ────────────────────────────────────────── */
 .form-group {
-  margin-bottom: 14px;
+  margin-bottom: 15px;
 }
 
 .form-label {
   display: block;
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 900;
   color: var(--muted);
   text-transform: uppercase;
-  letter-spacing: 0.8px;
-  margin-bottom: 7px;
+  letter-spacing: 0.9px;
+  margin-bottom: 8px;
 }
 
 .form-input {
   width: 100%;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 12px 14px;
+  min-height: 48px;
+  padding: 13px 15px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(0,0,0,0.26);
   color: var(--text);
-  font-size: 15px;
   outline: none;
-  transition: border-color 0.15s, background 0.15s;
+  font-size: 15px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, transform 0.18s ease;
   -webkit-appearance: none;
-  min-height: 44px;
 }
 
 .form-input:focus {
-  border-color: var(--green);
-  background: rgba(0,229,135,0.04);
+  border-color: rgba(0,245,155,0.55);
+  background: rgba(0,245,155,0.045);
+  box-shadow: 0 0 0 4px rgba(0,245,155,0.09);
+  transform: translateY(-1px);
 }
 
 .form-input::placeholder {
   color: var(--muted2);
 }
 
+.form-input option,
+.group-select option {
+  color: #f8fafc;
+  background: #111827;
+}
+
 .row-fields {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 12px;
 }
 
-/* ── Segmented picker ───────────────────────────────────── */
-.seg-picker {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.seg-btn {
-  padding: 7px 13px;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--border);
-  background: var(--card);
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 600;
-  transition: background 0.13s, color 0.13s, border-color 0.13s;
-  white-space: nowrap;
-  min-height: 34px;
-  display: flex;
-  align-items: center;
-}
-
-.seg-btn.active {
-  background: var(--green);
-  color: #042e16;
-  border-color: var(--green);
-  font-weight: 700;
-}
-
-/* ── Buttons ────────────────────────────────────────────── */
 .submit-btn {
   width: 100%;
-  padding: 15px;
-  background: var(--green);
-  color: #042e16;
-  border: none;
-  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-top: 12px;
+  border-radius: 20px;
+  background:
+    linear-gradient(135deg, #42ffd1, var(--green) 48%, #00b96d);
+  color: #03150d;
   font-size: 15px;
-  font-weight: 800;
-  margin-top: 10px;
-  transition: opacity 0.15s, transform 0.12s;
-  box-shadow: 0 4px 20px var(--green-glow);
-  letter-spacing: -0.2px;
+  font-weight: 900;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.18) inset,
+    0 16px 40px rgba(0,245,155,0.25);
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.22) inset,
+    0 22px 52px rgba(0,245,155,0.3);
 }
 
 .submit-btn:active {
-  opacity: 0.88;
   transform: scale(0.98);
 }
 
 .cancel-btn {
   width: 100%;
-  padding: 12px;
-  background: none;
+  padding: 13px;
   color: var(--muted);
-  border: none;
   font-size: 14px;
-  margin-top: 6px;
+  margin-top: 8px;
 }
 
-.group-select {
-  color: #f8fafc;
-  background: #111827;
+.type-toggle {
+  display: flex;
+  background: rgba(255,255,255,0.045);
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  padding: 5px;
+  gap: 5px;
+  margin-bottom: 18px;
 }
 
-.group-select option {
-  color: #f8fafc;
-  background: #111827;
+.type-toggle button {
+  flex: 1;
+  padding: 10px 8px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.type-toggle button.active {
+  color: var(--green);
+  background: rgba(0,245,155,0.12);
 }
