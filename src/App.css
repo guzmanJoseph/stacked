@@ -393,3 +393,21 @@
 .install-note {
   color: var(--green) !important;
 }
+
+.auth-logo {
+  width: 160px;
+  max-width: 55%;
+  height: auto;
+  display: block;
+  margin: 0 auto 24px;
+  object-fit: contain;
+}
+
+.app-logo {
+  width: 160px;
+  max-width: 60%;
+  height: auto;
+  display: block;
+  margin: 0 auto 18px;
+  object-fit: contain;
+}

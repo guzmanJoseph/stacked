@@ -4,17 +4,19 @@ import { supabase } from './supabaseClient';
 import Auth from './Auth';
 import { useData } from './hooks/useData';
 import Dashboard from './pages/Dashboard';
-import Bets from './pages/Bets';
 import Poker from './pages/Poker';
 import Calendar from './pages/Calendar';
+import Leaderboard from './pages/Leaderboard';
+import Friends from './pages/Friends';
+import Groups from './pages/Groups';
 import AddModal from './components/AddModal';
-import ScanModal from './components/ScanModal';
 
 const NAV = [
-  { id: 'dashboard', icon: 'ti-layout-dashboard', label: 'Dashboard' },
-  { id: 'bets', icon: 'ti-ticket', label: 'Bets' },
-  { id: 'poker', icon: 'ti-cards', label: 'Poker' },
+  { id: 'dashboard', icon: 'ti-layout-dashboard', label: 'Home' },
+  { id: 'poker', icon: 'ti-cards', label: 'Sessions' },
+  { id: 'leaderboard', icon: 'ti-trophy', label: 'Ranks' },
   { id: 'calendar', icon: 'ti-calendar', label: 'Calendar' },
+  { id: 'groups', icon: 'ti-circles', label: 'Groups' },
 ];
 
 export default function App() {
@@ -23,18 +25,11 @@ export default function App() {
   const [tab, setTab] = useState('dashboard');
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [scanOpen, setScanOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
-
-  const [scannedBet, setScannedBet] = useState(null);
   const [editingEntry, setEditingEntry] = useState(null);
 
   const {
     data,
-    addBet,
-    deleteBet,
-    updateBetResult,
-    editBet,
     addPoker,
     deletePoker,
     editPoker,
@@ -60,21 +55,15 @@ export default function App() {
 
   const resetModals = () => {
     setModalOpen(false);
-    setScanOpen(false);
     setSettingsOpen(false);
-    setScannedBet(null);
     setEditingEntry(null);
   };
 
   const handleSubmit = (entry) => {
     const { type, ...cleanEntry } = entry;
 
-    if (editingEntry?.type === 'bet') {
-      editBet(editingEntry.id, cleanEntry);
-    } else if (editingEntry?.type === 'poker') {
+    if (editingEntry?.type === 'poker') {
       editPoker(editingEntry.id, cleanEntry);
-    } else if (entry.type === 'bet') {
-      addBet(entry);
     } else {
       addPoker(entry);
     }
@@ -97,12 +86,12 @@ export default function App() {
 
   return (
     <div className="app">
-      <h1 className="sr-only">Bankroll Tracker</h1>
+      <h1 className="sr-only">Stacked</h1>
 
       <div className="top-bar">
         <div className="app-title">
-          <img src="/dt.png" alt="Degeneracy Tracker logo" className="nav-logo" />
-          <span>Degeneracy Tracker</span>
+          <img src="/stacked.png" alt="Stacked logo" className="nav-logo" />
+          <span>Stacked</span>
         </div>
 
         <button
@@ -117,20 +106,7 @@ export default function App() {
 
       <main className="main">
         {tab === 'dashboard' && (
-          <Dashboard data={data} stats={stats} />
-        )}
-
-        {tab === 'bets' && (
-          <Bets
-            data={data.bets}
-            onDelete={deleteBet}
-            onUpdateResult={updateBetResult}
-            onEdit={(bet) => {
-              setEditingEntry({ ...bet, type: 'bet' });
-              setScannedBet(null);
-              setModalOpen(true);
-            }}
-          />
+          <Dashboard data={data} />
         )}
 
         {tab === 'poker' && (
@@ -139,37 +115,38 @@ export default function App() {
             onDelete={deletePoker}
             onEdit={(session) => {
               setEditingEntry({ ...session, type: 'poker' });
-              setScannedBet(null);
               setModalOpen(true);
             }}
           />
         )}
 
+        {tab === 'leaderboard' && (
+          <Leaderboard user={session.user} />
+        )}
+
+        {tab === 'friends' && (
+          <Friends user={session.user} />
+        )}
+
+        {tab === 'groups' && (
+          <Groups user={session.user} />
+        )}
+
         {tab === 'calendar' && (
-          <Calendar bets={data.bets} poker={data.poker} />
+          <Calendar poker={data.poker} />
         )}
       </main>
 
-      {!modalOpen && !scanOpen && !settingsOpen && (
+      {!modalOpen && !settingsOpen && (
         <div className="fab-stack">
-          <button
-            className="fab scan-fab"
-            type="button"
-            onClick={() => setScanOpen(true)}
-            aria-label="Scan bet screenshot"
-          >
-            <i className="ti ti-camera" aria-hidden="true" />
-          </button>
-
           <button
             className="fab"
             type="button"
             onClick={() => {
               setEditingEntry(null);
-              setScannedBet(null);
               setModalOpen(true);
             }}
-            aria-label="Add entry"
+            aria-label="Add poker session"
           >
             <i className="ti ti-plus" aria-hidden="true" />
           </button>
@@ -193,21 +170,10 @@ export default function App() {
 
       {modalOpen && (
         <AddModal
-          initialBet={scannedBet || editingEntry}
+          user={session.user}
+          initialBet={editingEntry}
           onSubmit={handleSubmit}
           onClose={resetModals}
-        />
-      )}
-
-      {scanOpen && (
-        <ScanModal
-          onClose={() => setScanOpen(false)}
-          onScanComplete={(parsedBet) => {
-            setScannedBet(parsedBet);
-            setEditingEntry(null);
-            setScanOpen(false);
-            setModalOpen(true);
-          }}
         />
       )}
 

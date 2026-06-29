@@ -196,3 +196,13 @@
   font-size: 14px;
   margin-top: 6px;
 }
+
+.group-select {
+  color: #f8fafc;
+  background: #111827;
+}
+
+.group-select option {
+  color: #f8fafc;
+  background: #111827;
+}

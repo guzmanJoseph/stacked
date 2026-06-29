@@ -28,11 +28,11 @@ export default function Auth() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <img src="/dt.png" alt="Degeneracy Tracker logo" className="app-logo" />
+        <img src="/stacked.png" alt="Degeneracy Tracker logo" className="app-logo" />
 
-        <h1>Degeneracy Tracker</h1>
+        <h1>Stacked</h1>
         <p className="auth-subtitle">
-          Track bets, parlays, poker sessions, profit, and losses in one place.
+          Track profits and losses from your poker sessions with your friends.
         </p>
 
         <form onSubmit={handleAuth} className="auth-form">
