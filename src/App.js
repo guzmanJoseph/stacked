@@ -33,7 +33,6 @@ export default function App() {
     addPoker,
     deletePoker,
     editPoker,
-    stats,
   } = useData(session?.user);
 
   useEffect(() => {

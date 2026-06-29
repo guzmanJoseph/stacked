@@ -14,8 +14,7 @@ import PokerCard from '../components/EntryCard';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
 export default function Dashboard({ data }) {
-  const poker = data.poker || [];
-
+  const poker = useMemo(() => data.poker || [], [data.poker]);
   const now = new Date();
   const currentMonth = now.toISOString().slice(0, 7);
 

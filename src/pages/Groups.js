@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';
 import './Dashboard.css';
 
@@ -7,18 +7,18 @@ export default function Groups({ user }) {
   const [joinGroupId, setJoinGroupId] = useState('');
   const [groups, setGroups] = useState([]);
 
-  const loadGroups = async () => {
-    const { data, error } = await supabase
-      .from('group_members')
-      .select('group_id, role, groups(id, name, owner_id, created_at)')
-      .eq('user_id', user.id);
+const loadGroups = useCallback(async () => {
+  const { data, error } = await supabase
+    .from('group_members')
+    .select('group_id, role, groups(id, name, owner_id, created_at)')
+    .eq('user_id', user.id);
 
-    if (!error) setGroups(data || []);
-  };
+  if (!error) setGroups(data || []);
+}, [user.id]);
 
-  useEffect(() => {
-    if (user?.id) loadGroups();
-  }, [user]);
+useEffect(() => {
+  if (user?.id) loadGroups();
+}, [user?.id, loadGroups]);
 
   const createGroup = async () => {
     if (!groupName.trim()) return;
