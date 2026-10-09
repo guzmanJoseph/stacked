@@ -165,15 +165,12 @@ export default function Dashboard({ data }) {
   const endingValue =
     chartValues[chartValues.length - 1] || 0;
 
-  const lineColor =
-    endingValue >= 0
-      ? 'rgb(68, 131, 239)'
-      : 'rgb(68, 131, 239)';
+  const lineColor = '#0d0d0d';
 
   const fillColor =
     endingValue >= 0
-      ? 'rgb(68, 131, 239, 0.15 )'
-      : 'rgba(68, 131, 239, 0.15';
+      ? 'rgba(182, 255, 26, 0.75)'
+      : 'rgba(255, 46, 136, 0.7)';
 
   const chartData = {
     labels: chartLabels,
@@ -184,14 +181,15 @@ export default function Dashboard({ data }) {
         backgroundColor: fillColor,
         fill: true,
 
-        borderWidth: 3,
-        tension: 0.3,
+        borderWidth: 4,
+        tension: 0.25,
 
-        pointRadius: 3,
-        pointHoverRadius: 6,
+        pointRadius: 5,
+        pointHoverRadius: 9,
 
-        pointBackgroundColor: lineColor,
-        pointBorderColor: lineColor,
+        pointBackgroundColor: '#ffcf1f',
+        pointBorderColor: '#0d0d0d',
+        pointBorderWidth: 3,
       },
     ],
   };
@@ -212,6 +210,15 @@ export default function Dashboard({ data }) {
 
       tooltip: {
         displayColors: false,
+        backgroundColor: '#ff2e88',
+        titleColor: '#ffffff',
+        bodyColor: '#ffffff',
+        borderColor: '#0d0d0d',
+        borderWidth: 3,
+        cornerRadius: 10,
+        padding: 12,
+        titleFont: { weight: '900' },
+        bodyFont: { weight: '800' },
 
         callbacks: {
           title: (items) => {
@@ -257,9 +264,10 @@ export default function Dashboard({ data }) {
         },
 
         ticks: {
-          color: '#64748b',
+          color: '#0d0d0d',
           font: {
-            size: 10,
+            size: 11,
+            weight: '800',
           },
 
           maxTicksLimit: 6,
@@ -269,7 +277,8 @@ export default function Dashboard({ data }) {
 
       y: {
         grid: {
-          color: 'rgba(148, 163, 184, 0.08)',
+          color: 'rgba(13, 13, 13, 0.18)',
+          lineWidth: 2,
         },
 
         border: {
@@ -277,10 +286,11 @@ export default function Dashboard({ data }) {
         },
 
         ticks: {
-          color: '#64748b',
+          color: '#0d0d0d',
 
           font: {
-            size: 10,
+            size: 11,
+            weight: '800',
           },
 
           callback: (value) => {
