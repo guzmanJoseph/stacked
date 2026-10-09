@@ -165,12 +165,12 @@ export default function Dashboard({ data }) {
   const endingValue =
     chartValues[chartValues.length - 1] || 0;
 
-  const lineColor = '#0d0d0d';
+  const lineColor = '#e5b567';
 
   const fillColor =
     endingValue >= 0
-      ? 'rgba(182, 255, 26, 0.75)'
-      : 'rgba(255, 46, 136, 0.7)';
+      ? 'rgba(229, 181, 103, 0.14)'
+      : 'rgba(240, 98, 125, 0.12)';
 
   const chartData = {
     labels: chartLabels,
@@ -181,15 +181,15 @@ export default function Dashboard({ data }) {
         backgroundColor: fillColor,
         fill: true,
 
-        borderWidth: 4,
-        tension: 0.25,
+        borderWidth: 2.5,
+        tension: 0.35,
 
-        pointRadius: 5,
-        pointHoverRadius: 9,
+        pointRadius: 3,
+        pointHoverRadius: 6,
 
-        pointBackgroundColor: '#ffcf1f',
-        pointBorderColor: '#0d0d0d',
-        pointBorderWidth: 3,
+        pointBackgroundColor: '#e5b567',
+        pointBorderColor: '#0a0d12',
+        pointBorderWidth: 1.5,
       },
     ],
   };
@@ -210,15 +210,15 @@ export default function Dashboard({ data }) {
 
       tooltip: {
         displayColors: false,
-        backgroundColor: '#ff2e88',
-        titleColor: '#ffffff',
-        bodyColor: '#ffffff',
-        borderColor: '#0d0d0d',
-        borderWidth: 3,
-        cornerRadius: 10,
+        backgroundColor: '#171d27',
+        titleColor: '#e5b567',
+        bodyColor: '#edf1f7',
+        borderColor: 'rgba(255, 255, 255, 0.12)',
+        borderWidth: 1,
+        cornerRadius: 12,
         padding: 12,
-        titleFont: { weight: '900' },
-        bodyFont: { weight: '800' },
+        titleFont: { weight: '700' },
+        bodyFont: { weight: '600' },
 
         callbacks: {
           title: (items) => {
@@ -264,10 +264,10 @@ export default function Dashboard({ data }) {
         },
 
         ticks: {
-          color: '#0d0d0d',
+          color: '#98a2b3',
           font: {
-            size: 11,
-            weight: '800',
+            size: 10,
+            weight: '600',
           },
 
           maxTicksLimit: 6,
@@ -277,8 +277,8 @@ export default function Dashboard({ data }) {
 
       y: {
         grid: {
-          color: 'rgba(13, 13, 13, 0.18)',
-          lineWidth: 2,
+          color: 'rgba(255, 255, 255, 0.05)',
+          lineWidth: 1,
         },
 
         border: {
@@ -286,11 +286,11 @@ export default function Dashboard({ data }) {
         },
 
         ticks: {
-          color: '#0d0d0d',
+          color: '#98a2b3',
 
           font: {
-            size: 11,
-            weight: '800',
+            size: 10,
+            weight: '600',
           },
 
           callback: (value) => {
