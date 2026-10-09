@@ -31,7 +31,7 @@ export function useData(user) {
   }, [user]);
 
   const addPoker = useCallback(
-    async ({ opp, buyin, cashout, hours, date, group_id }) => {
+    async ({ opp, buyin, cashout, hours, date, group_id, small_blind, big_blind }) => {
       if (!user) return;
 
       const pnl = Number(cashout) - Number(buyin);
@@ -44,6 +44,8 @@ export function useData(user) {
         hours: hours ? Number(hours) : 0,
         date,
         group_id: group_id || null,
+        small_blind: small_blind ? Number(small_blind) : null,
+        big_blind: big_blind ? Number(big_blind) : null,
         pnl,
       };
 
@@ -94,6 +96,8 @@ export function useData(user) {
         cashout: Number(updates.cashout),
         hours: updates.hours ? Number(updates.hours) : 0,
         group_id: updates.group_id || null,
+        small_blind: updates.small_blind ? Number(updates.small_blind) : null,
+        big_blind: updates.big_blind ? Number(updates.big_blind) : null,
         pnl,
       })
       .eq('id', id)

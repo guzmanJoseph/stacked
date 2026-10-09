@@ -163,3 +163,21 @@
   color: var(--red);
   border-color: rgba(255,69,103,0.28);
 }
+/* =========================================
+   STAKES TAG
+========================================= */
+
+.stakes-tag {
+  display: inline-block;
+  padding: 2px 7px;
+  margin-right: 7px;
+
+  border-radius: 6px;
+
+  background: var(--green-dim);
+  border: 1px solid rgba(0, 245, 155, 0.28);
+
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 700;
+}

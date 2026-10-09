@@ -20,6 +20,12 @@ export function PokerCard({
         </span>
 
         <span className="entry-sub">
+          {session.big_blind ? (
+            <span className="stakes-tag mono">
+              {session.small_blind}/{session.big_blind}
+            </span>
+          ) : null}
+
           Buy-in ${session.buyin}
           {' → '}
           Cash-out ${session.cashout}

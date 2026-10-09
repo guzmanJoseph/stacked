@@ -165,15 +165,12 @@ export default function Dashboard({ data }) {
   const endingValue =
     chartValues[chartValues.length - 1] || 0;
 
-  const lineColor =
-    endingValue >= 0
-      ? 'rgb(68, 131, 239)'
-      : 'rgb(68, 131, 239)';
+  const lineColor = '#e5b567';
 
   const fillColor =
     endingValue >= 0
-      ? 'rgb(68, 131, 239, 0.15 )'
-      : 'rgba(68, 131, 239, 0.15';
+      ? 'rgba(229, 181, 103, 0.14)'
+      : 'rgba(240, 98, 125, 0.12)';
 
   const chartData = {
     labels: chartLabels,
@@ -184,14 +181,15 @@ export default function Dashboard({ data }) {
         backgroundColor: fillColor,
         fill: true,
 
-        borderWidth: 3,
-        tension: 0.3,
+        borderWidth: 2.5,
+        tension: 0.35,
 
         pointRadius: 3,
         pointHoverRadius: 6,
 
-        pointBackgroundColor: lineColor,
-        pointBorderColor: lineColor,
+        pointBackgroundColor: '#e5b567',
+        pointBorderColor: '#0a0d12',
+        pointBorderWidth: 1.5,
       },
     ],
   };
@@ -212,6 +210,15 @@ export default function Dashboard({ data }) {
 
       tooltip: {
         displayColors: false,
+        backgroundColor: '#171d27',
+        titleColor: '#e5b567',
+        bodyColor: '#edf1f7',
+        borderColor: 'rgba(255, 255, 255, 0.12)',
+        borderWidth: 1,
+        cornerRadius: 12,
+        padding: 12,
+        titleFont: { weight: '700' },
+        bodyFont: { weight: '600' },
 
         callbacks: {
           title: (items) => {
@@ -257,9 +264,10 @@ export default function Dashboard({ data }) {
         },
 
         ticks: {
-          color: '#64748b',
+          color: '#98a2b3',
           font: {
             size: 10,
+            weight: '600',
           },
 
           maxTicksLimit: 6,
@@ -269,7 +277,8 @@ export default function Dashboard({ data }) {
 
       y: {
         grid: {
-          color: 'rgba(148, 163, 184, 0.08)',
+          color: 'rgba(255, 255, 255, 0.05)',
+          lineWidth: 1,
         },
 
         border: {
@@ -277,10 +286,11 @@ export default function Dashboard({ data }) {
         },
 
         ticks: {
-          color: '#64748b',
+          color: '#98a2b3',
 
           font: {
             size: 10,
+            weight: '600',
           },
 
           callback: (value) => {
@@ -298,6 +308,42 @@ export default function Dashboard({ data }) {
   // -----------------------
   // RECENT SESSIONS
   // -----------------------
+
+  // -----------------------
+  // STAKES BREAKDOWN
+  // -----------------------
+
+  const stakesStats = useMemo(() => {
+    const byLevel = new Map();
+
+    poker.forEach((p) => {
+      if (!p.big_blind) return;
+
+      const key = `${p.small_blind || 0}/${p.big_blind}`;
+
+      if (!byLevel.has(key)) {
+        byLevel.set(key, {
+          key,
+          sb: Number(p.small_blind || 0),
+          bb: Number(p.big_blind),
+          sessions: 0,
+          net: 0,
+          wins: 0,
+          hours: 0,
+        });
+      }
+
+      const level = byLevel.get(key);
+      const pnl = Number(p.pnl || 0);
+
+      level.sessions += 1;
+      level.net += pnl;
+      level.hours += Number(p.hours || 0);
+      if (pnl > 0) level.wins += 1;
+    });
+
+    return [...byLevel.values()].sort((a, b) => a.bb - b.bb);
+  }, [poker]);
 
   const recent = [...poker]
     .sort((a, b) =>
@@ -441,6 +487,60 @@ export default function Dashboard({ data }) {
           positive={false}
         />
       </div>
+
+      {stakesStats.length > 0 && (
+        <>
+          <div className="section-hdr">
+            <span className="section-label">
+              By Stakes
+            </span>
+
+            <span className="stakes-hint">
+              BB · win rate · net
+            </span>
+          </div>
+
+          <div className="stakes-breakdown">
+            {stakesStats.map((level) => {
+              const wr = level.sessions
+                ? Math.round(
+                    (level.wins / level.sessions) * 100
+                  )
+                : 0;
+
+              return (
+                <div
+                  className="stakes-row"
+                  key={level.key}
+                >
+                  <span className="stakes-level mono">
+                    {level.key}
+                  </span>
+
+                  <span className="stakes-meta">
+                    {level.sessions} sess
+                    {level.hours
+                      ? ` · ${level.hours.toFixed(1)}h`
+                      : ''}
+                  </span>
+
+                  <span
+                    className={`stakes-wr ${wr >= 50 ? 'pos' : 'neg'}`}
+                  >
+                    {wr}%
+                  </span>
+
+                  <span
+                    className={`stakes-net ${level.net >= 0 ? 'pos' : 'neg'}`}
+                  >
+                    {fmt(level.net)}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
 
       <div className="section-hdr">
         <span className="section-label">
