@@ -22,6 +22,7 @@ import Calendar from './pages/Calendar';
 import Leaderboard from './pages/Leaderboard';
 import Friends from './pages/Friends';
 import Groups from './pages/Groups';
+import Feed from './pages/Feed';
 import Payouts from './pages/Payouts';
 import SharedGame from './pages/SharedGame';
 import Settings from './pages/Settings';
@@ -58,6 +59,11 @@ const NAV = [
     id: 'calendar',
     icon: 'ti-calendar',
     label: 'Calendar',
+  },
+  {
+    id: 'feed',
+    icon: 'ti-message-share',
+    label: 'Feed',
   },
   {
     id: 'groups',
@@ -658,6 +664,15 @@ if (isResetPasswordPage) {
 
         {tab === 'friends' && (
           <Friends
+            user={session.user}
+          />
+        )}
+
+
+        {/* FEED */}
+
+        {tab === 'feed' && (
+          <Feed
             user={session.user}
           />
         )}

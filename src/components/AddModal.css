@@ -159,3 +159,42 @@
   color: var(--green);
   background: rgba(0,245,155,0.12);
 }
+/* =========================================
+   STAKES CHIPS
+========================================= */
+
+.stakes-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.stakes-chip {
+  padding: 8px 13px;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.stakes-chip:active {
+  transform: scale(0.94);
+}
+
+.stakes-chip.active {
+  background: var(--green-dim);
+  border-color: var(--green);
+  color: var(--green);
+  box-shadow: 0 0 18px rgba(0, 245, 155, 0.25);
+}

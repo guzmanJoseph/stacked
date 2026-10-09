@@ -194,7 +194,7 @@
 
 .bottom-nav {
   display: flex;
-  gap: 6px;
+  gap: 2px;
 
   position: fixed;
 
@@ -247,9 +247,9 @@
   flex-direction: column;
   align-items: center;
 
-  gap: 4px;
+  gap: 3px;
 
-  padding: 9px 4px;
+  padding: 9px 2px;
 
   border: none;
   border-radius: 18px;
@@ -258,7 +258,7 @@
 
   color: var(--muted);
 
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
 
   position: relative;
@@ -272,7 +272,7 @@
 }
 
 .nav-btn i {
-  font-size: 21px;
+  font-size: 19px;
 
   transition:
     transform 0.22s

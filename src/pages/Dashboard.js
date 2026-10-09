@@ -299,6 +299,42 @@ export default function Dashboard({ data }) {
   // RECENT SESSIONS
   // -----------------------
 
+  // -----------------------
+  // STAKES BREAKDOWN
+  // -----------------------
+
+  const stakesStats = useMemo(() => {
+    const byLevel = new Map();
+
+    poker.forEach((p) => {
+      if (!p.big_blind) return;
+
+      const key = `${p.small_blind || 0}/${p.big_blind}`;
+
+      if (!byLevel.has(key)) {
+        byLevel.set(key, {
+          key,
+          sb: Number(p.small_blind || 0),
+          bb: Number(p.big_blind),
+          sessions: 0,
+          net: 0,
+          wins: 0,
+          hours: 0,
+        });
+      }
+
+      const level = byLevel.get(key);
+      const pnl = Number(p.pnl || 0);
+
+      level.sessions += 1;
+      level.net += pnl;
+      level.hours += Number(p.hours || 0);
+      if (pnl > 0) level.wins += 1;
+    });
+
+    return [...byLevel.values()].sort((a, b) => a.bb - b.bb);
+  }, [poker]);
+
   const recent = [...poker]
     .sort((a, b) =>
       (b.date || '').localeCompare(a.date || '')
@@ -441,6 +477,60 @@ export default function Dashboard({ data }) {
           positive={false}
         />
       </div>
+
+      {stakesStats.length > 0 && (
+        <>
+          <div className="section-hdr">
+            <span className="section-label">
+              By Stakes
+            </span>
+
+            <span className="stakes-hint">
+              BB · win rate · net
+            </span>
+          </div>
+
+          <div className="stakes-breakdown">
+            {stakesStats.map((level) => {
+              const wr = level.sessions
+                ? Math.round(
+                    (level.wins / level.sessions) * 100
+                  )
+                : 0;
+
+              return (
+                <div
+                  className="stakes-row"
+                  key={level.key}
+                >
+                  <span className="stakes-level mono">
+                    {level.key}
+                  </span>
+
+                  <span className="stakes-meta">
+                    {level.sessions} sess
+                    {level.hours
+                      ? ` · ${level.hours.toFixed(1)}h`
+                      : ''}
+                  </span>
+
+                  <span
+                    className={`stakes-wr ${wr >= 50 ? 'pos' : 'neg'}`}
+                  >
+                    {wr}%
+                  </span>
+
+                  <span
+                    className={`stakes-net ${level.net >= 0 ? 'pos' : 'neg'}`}
+                  >
+                    {fmt(level.net)}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
 
       <div className="section-hdr">
         <span className="section-label">
